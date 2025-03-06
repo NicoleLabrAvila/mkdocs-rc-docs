@@ -396,10 +396,14 @@ from there to Myriad.
 
 ## How do I submit a job to the scheduler?
 
-To submit a job to the scheduler you need to write a jobscript that contains the resources the job is asking for and the actual commands you want to run. This jobscript is then submitted using the `qsub` command.
+Our scheduler **Slurm** provides two approaches to submit jobs: 
+ 1)  Using a bash script that includes directives to the Slurm scheduler.
+ 2)  Using command-line arguments to provide directives to Slurm.
+    
+To submit a job to the scheduler you need to write a jobscript that contains the resources the job is asking for and the actual commands you want to run. This jobscript is then submitted using the `batch` command.
 
 ```
-qsub myjobscript
+batch myjobscript
 ```
 
 It will be put in to the queue and will begin running on the compute nodes at some point later when it has been allocated resources.
