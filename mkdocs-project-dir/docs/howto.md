@@ -397,48 +397,48 @@ from there to Myriad.
 ## How do I submit a job to the scheduler?
 
 Our scheduler **Slurm** provides two approaches to submit jobs: 
+
  1)  Using a bash script that includes directives to the Slurm scheduler.
  2)  Using command-line arguments to provide directives to Slurm.
-    
-To submit a job to the scheduler you need to write a jobscript that contains the resources the job is asking for and the actual commands you want to run. This jobscript is then submitted using the `batch` command.
+
+### Using bash script
+
+For the first approach, to submit a job to the scheduler you need to write a jobscript that contains the resources the job is asking for and the actual commands/programs you want to run.  This jobscript is then submitted using the `batch` command. The `#SBATCH` lines in your jobscript are options to `sbatch`. It will take each line which has `#SBATCH` as the first two characters and use the contents beyond that as an option. It will be put in to the queue and will begin running on the compute nodes at some point later when it has been allocated resources.  
 
 ```
 batch myjobscript
 ```
+On the other side, if you want an interactive execution of your job, you can use the `srun` comand to initiate job steps in real time. You can also use `srun` inside the jobscript you are running with `sbatch` to launch parallel tasks. 
 
-It will be put in to the queue and will begin running on the compute nodes at some point later when it has been allocated resources.
+### Passing in command-line arguments
 
-### Passing in qsub options on the command line
-
-The `#$` lines in your jobscript are options to qsub. It will take each line which has `#$` as the first two characters and use the contents beyond that as an option. 
-
-You can also pass options directly to the qsub command and this will override the settings in your script. This can be useful if you are scripting your job submissions in more complicated ways.
+You can also pass options directly to the `sbatch` commands and this will override the settings in your script. This can be useful if you are scripting your job submissions in more complicated ways. The `srun` command only accepts comand-line arguments
 
 For example, if you want to change the name of the job for this one instance of the job you can submit your script with:
 ```
-qsub -N NewName myscript.sh
+sbatch --job-name=NewName myscript.sh
 ```
 
 Or if you want to increase the wall-clock time to 24 hours:
 ```
-qsub -l h_rt=24:0:0 myscript.sh
+qsub t 24:0:0 myscript.sh
 ```
 
 You can submit jobs with dependencies by using the `-hold_jid` option. For example, the command below submits a job that won't run until job 12345 has finished:
 ```
-qsub -hold_jid 12345 myscript.sh
+sbatch --depend=12345 myscript.sh
 ```
 
 You may specify node type with the `-ac allow=` flags as below: 
 
 ```
-qsub -ac allow=L myscript.sh
+sbatch -ac allow=L myscript.sh
 ```
 
 This command tells this GPU job to only run the type L nodes which have Nvidia A100s
 
 ```
-qsub -ac allow=EF myscript.sh
+sbatch -ac allow=EF myscript.sh
 ```
 
 This tells this GPU job to only run on the type E and F nodes which have Nvidia V100s.
