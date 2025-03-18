@@ -17,11 +17,11 @@ queue and wait for it to complete.
 
 You will be granted an interactive shell after running a command that
 checks with the scheduler whether the resources you wish to use in your
-tests/analysis are available. Interactive sessions are requested using the qrsh command. 
+tests/analysis are available. Interactive sessions are requested using the salloc command. 
 It typically takes the form:
 
 ```
-qrsh -pe mpi 8 -l mem=512M,h_rt=2:00:00 -now no
+salloc -pe mpi 8 -l mem=512M,h_rt=2:00:00 -now no
 ```
 
 In this example you are asking to run eight parallel processes
@@ -30,12 +30,12 @@ hours.
 
 All job types we support on the system are supported via an interactive
 session (see our [examples section](Example_Jobscripts.md)).
-Likewise, all qsub options are supported like regular job submission
-with the difference that with qrsh they must be given at the command
+Likewise, all srun options are supported like regular job submission
+with the difference that with srun they must be given at the command
 line, and not with any job script (or via -@).
 
 In addition the `-now` option is useful when a cluster is busy. 
-By default qrsh and qlogin jobs will run on the next scheduling
+By default salloc and qlogin jobs will run on the next scheduling
 cycle or give up. The `-now no` option tells it to keep waiting
 until it gets scheduled. Pressing Ctrl+C (i.e. the control key
 and the C key at the same time) will safely cancel the request
@@ -49,11 +49,11 @@ More resources can be found here:
 ## Interactive X sessions
 
 You can get an interactive X session from the head node of the job back
-to the login node. The way to do this is to run the `qrsh` command in the
+to the login node. The way to do this is to run the `srun` command in the
 following generic fashion:
 
 ```
-qrsh <options> <command> <arguments to <command>>
+srun <options> <command> <arguments to <command>>
 ```
 
 Where `<command>` is either a command to launch an X terminal like
@@ -61,10 +61,10 @@ Xterm or Mrxvt or a GUI application like XMGrace or GaussView.
 
 To make effective use of the X forwarding you will need to have logged
 in to the login node with ssh -X or some equivalent method. Here is an
-example of how you can get a X terminal session with the qrsh command:
+example of how you can get a X terminal session with the srun command:
 
 ```
-qrsh -l mem=512M,h_rt=0:30:0 \
+srun -l mem=512M,h_rt=0:30:0 \
    "/shared/ucl/apps/mrxvt/0.5.4/bin/mrxvt -title 'User Test Node'"
 ```
 
