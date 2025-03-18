@@ -17,11 +17,11 @@ queue and wait for it to complete.
 
 You will be granted an interactive shell after running a command that
 checks with the scheduler whether the resources you wish to use in your
-tests/analysis are available. Interactive sessions are requested using the salloc command. 
+tests/analysis are available. Interactive sessions are requested using the `srun` and `salloc` commands (CHECK MORE ABOUT THIS!).  
 It typically takes the form:
 
 ```
-salloc -pe mpi 8 -l mem=512M,h_rt=2:00:00 -now no
+salloc -n mpi 8 -l mem=512M, t=2:00:00 (CHECK!)
 ```
 
 In this example you are asking to run eight parallel processes
@@ -34,12 +34,12 @@ Likewise, all srun options are supported like regular job submission
 with the difference that with srun they must be given at the command
 line, and not with any job script (or via -@).
 
-In addition the `-now` option is useful when a cluster is busy. 
+***In addition the `-now` option is useful when a cluster is busy. 
 By default salloc and qlogin jobs will run on the next scheduling
 cycle or give up. The `-now no` option tells it to keep waiting
 until it gets scheduled. Pressing Ctrl+C (i.e. the control key
 and the C key at the same time) will safely cancel the request
-if it doesn't seem to be able to get you a session.
+if it doesn't seem to be able to get you a session.*** (CHECK THIS!)
 
 More resources can be found here:
 
@@ -57,7 +57,7 @@ srun <options> <command> <arguments to <command>>
 ```
 
 Where `<command>` is either a command to launch an X terminal like
-Xterm or Mrxvt or a GUI application like XMGrace or GaussView.
+Xterm or Mrxvt, a GUI application like XMGrace or GaussView, or a script.
 
 To make effective use of the X forwarding you will need to have logged
 in to the login node with ssh -X or some equivalent method. Here is an
@@ -67,6 +67,7 @@ example of how you can get a X terminal session with the srun command:
 srun -l mem=512M,h_rt=0:30:0 \
    "/shared/ucl/apps/mrxvt/0.5.4/bin/mrxvt -title 'User Test Node'"
 ```
+(CHECK THIS!)
 
 ## Working on the nodes
 
@@ -83,8 +84,8 @@ In the above, `<hostname>` can be obtained by inspecting the file
 
 ## GPU test nodes
 
-You can also run GPU jobs interactively simply by adding the `-l gpu=1`
-or `-l gpu=2` options to the qrsh command as normal.
+**You can also run GPU jobs interactively simply by adding the `-l gpu=1`
+or `-l gpu=2` options to the srun command as normal.** (Check THIS!)
 
 For more information, please contact us on <rc-support@ucl.ac.uk>
 
