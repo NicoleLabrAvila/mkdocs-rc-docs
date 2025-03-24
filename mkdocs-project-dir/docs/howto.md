@@ -522,12 +522,12 @@ If a job stays in `t` or `dr` state for a long time, the node it was on is likel
 
 A job in `Eqw` will remain in that state until you delete it - you should first have a look at what the error was with `scontrol show job `.
 
-### scontrol
+### qexplain
 
-This is a utility to display detailed information about the specified job.
+This is a utility to show you the non-truncated error reported by your job. `scontrol show job` will show you a truncated version near the bottom of the output.
 
 ```
-scontrol show job 123454
+qexplain 123454
 ```
 
 ### scancel
