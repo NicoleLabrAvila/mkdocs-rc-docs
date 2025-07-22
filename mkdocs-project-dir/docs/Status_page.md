@@ -487,8 +487,6 @@ This page outlines that status of each of the machines managed by the Research C
     At the moment we're still seeing some leftover activity in the logs but there don't appear to be any 
     active problems.
 
-#### Latest on Myriad
-
   - 2024-11-12 17:20 - **Myriad filesystem and refresh news; ACFS available now**
 
     **The ARC Cluster File System (ACFS) is now available on Myriad.**
@@ -549,6 +547,364 @@ This page outlines that status of each of the machines managed by the Research C
     look at [our previous message with full info](#action-required-compression-or-removal-of-data) and 
     move data to the ACFS, off-cluster, or compress it if possible.
 
+  - 2025-02-10 - **OS, software stack, scheduler and hardware update news**
+
+    This is to keep you informed about upcoming changes to Myriad.
+
+    **Live now:**
+
+    * Research Data Storage Service mount point on login nodes
+    * Open OnDemand pilot access available on request until OS upgrade
+
+    If you have an RDSS project, you can now access that read-write on the Myriad login nodes at `/rdss`. 
+    There are subdirectories `rd00`, `rd01` that contain projects with names beginning 
+    `ritd-ag-project-rd00` or `ritd-ag-project-rd01` and so on. You cannot access it from the compute 
+    nodes. You should `cp` or `rsync` data to your home, Scratch or the ACFS via the login nodes before 
+    doing any computation using the data.
+
+    If you want to access our [Open OnDemand pilot](https://www.rc.ucl.ac.uk/docs/Supplementary/OnDemand/) 
+    for a remote desktop, Jupyter Notebooks or RStudio, contact rc-support@ucl.ac.uk and we will give you 
+    access. Please fill in the feedback survey if you use it. This will be used to prioritise whether we 
+    redo the work to set it up after the OS upgrade or concentrate on other improvements.
+
+    **Incoming:**
+
+    * OS upgrade to RHEL 9.5
+    * Scheduler move to Slurm
+    * New software via Spack
+    * Alteration to hardware refresh schedule
+
+    We will be moving to RHEL 9.5 as our operating system and Slurm as our new scheduler. The new 
+    filesystem below will be available before this is rolled out on Myriad.
+
+    If you have access to paid priority time on Myriad, we will stop using Gold for this and use Slurm 
+    mechanisms for priority allocations instead. You will receive the equivalent resource.
+
+    Our user documentation will be updated with examples of Slurm jobscripts instead of the SGE ones we 
+    currently have. Slurm uses `srun` and `sbatch` commands instead of `qsub`, if you have come across 
+    those in other software documentation.
+
+    The OS upgrade should allow you to run more recent binaries that currently give errors about GLIBC 
+    being too old. System tools will be newer and may look a little different.
+
+    We are also creating a new small software stack built with Spack. This will available to you to test 
+    before the OS upgrade, then rebuilt again after it, so it will change slightly in the meantime. Do 
+    let us know if applications you use in it are missing options we currently have or not working as 
+    you expect. 
+
+    Most of the existing software stack will be reinstalled for the new OS. We are looking to remove 
+    some of the oldest installs and modules that are not being used in jobs. We then intend to prune 
+    this further over time and add newer versions into the Spack stack.
+
+    **Alteration to hardware refresh schedule**
+
+    The oldest nodetypes (H,I,J) in Myriad have been drained of jobs as planned and are being removed 
+    to make space in the racks.
+
+    The new Myriad filesystem is in place, undergoing its final testing period and we should have 
+    information on 24 Feb for timescales when you can expect to begin using it.
+
+    We are still adding new hardware to Myriad for general use, but it will not be added in March/April 
+    as previously stated. Instead, we will be replacing all Myriad's network hardware first, and then 
+    getting the new standard compute nodes in the next UCL financial year after August 2025. The specs 
+    for the new compute nodes are:
+
+    * AMD EPYC 9554P 64C 360W 3.1GHz (64 cores)
+    * 768G RAM
+    * 2x 480GB M.2 7450 PRO NVMe SSD (960G local disk)
+
+    Note, this does not affect timelines for any paid nodes and those can still go in before this. It 
+    is to split the purchase over financial years rather than any issue with hardware supply times.
+
+    There is some additional hardware that we may be able to make available to increase general use 
+    Myriad capacity in the intervening period. The details need working out and that will take a few 
+    months. The OS and scheduler upgrade will need to happen first.
+
+    **Maintenance day Tues 11 Feb**
+
+    The nodes are being drained for a system config change this maintenance day - they'll be rebooted 
+    and jobs restarted after each is updated. There will also be a reboot of switches in the ACFS that 
+    will cause the ACFS mount on Myriad to hang for a period during the day. This is listed at 
+    [Planned Outages](https://www.rc.ucl.ac.uk/docs/Planned_Outages/ )
+
+    **Documentation links**
+
+    The SSL certificate for www.rc.ucl.ac.uk is due to expire at midnight on 12 Feb. We're getting a 
+    new one but there might be a gap if it can't be renewed in time. If that happens your browser may 
+    prevent you accessing that link because the certificate is expired.
+
+    * [mkdocs-rc-docs on Github](https://github-pages.arc.ucl.ac.uk/mkdocs-rc-docs/) will work
+
+    If there is a gap when the certificate expires we'll update the links in the message you see when 
+    you log in to the cluster, but if you are using an existing link or bookmark for www.rc.ucl.ac.uk 
+    at that point you will get an error or warning about the expired certificate.
+
+    (This did not happen, the certificate was renewed in time).
+
+
+    2025-03-05 - **Myriad new filesystem update**
+
+    The Myriad new filesystem is going to have a system update before we put it into production - the 
+    new version fixes a number of security vulnerabilities, and it will be less disruptive to your 
+    jobs if we do this before you have access to it. We also have some minor hardware issues that have 
+    failed deployment checks that we are getting resolved with our vendors.
+
+    We're currently expecting to be able to give you access to the new filesystem around **31 March**, 
+    assuming all goes well with the above updates and the remaining snagging issues.
+
+    **What will happen?**
+
+    When the new filesystem goes live, you'll log in and will see a new empty home and Scratch. Your 
+    old home and Scratch will be available read-only at `/old_lustre/home/username` and 
+    `/old_lustre/scratch/username`. You'll be able to copy or rsync data out of it to the new 
+    filesystem, to the ACFS or archive it elsewhere. You will not be able to modify or delete the data 
+    in `/old_lustre`.
+
+    Your new home directory will not be backed up. The ACFS will remain as your backed-up location.
+
+    `/old_lustre` will remain available for three months after the new filesystem go-live date and will 
+    then be removed. 
+
+    All jobs will be held in the queue and you'll be able to remove the holds yourself when the data 
+    they need is in the right place on the new filesystem.
+
+    Information on how best to do the data moving will be sent nearer the time and added to the documentation.
+
+    **Quota expiry on the new filesystem**
+
+    For the new filesystem we will be updating our policy on what happens when increased quotas expire 
+    and are not renewed. This will involve moving your user data off Myriad's filesystem to another 
+    location temporarily, and then deletion of it on specified timescales. This is to avoid the new 
+    filesystem filling up with data which is no longer being worked on and to allow those of you who are 
+    actively using an increased quota to be able to have the space you need.
+
+    Myriad's filesystem is not a long-term data store - if you are using the data in your jobs, that is 
+    fine. If you are no longer using Myriad to do computations on the data, it shouldn't be left on 
+    Myriad's filesystem.
+
+    You will receive multiple notifications before and after your quota expires if this is happening.
+
+    Further details on this to come. A similar process will take place when your Myriad user account 
+    expires.
+
+#### Myriad new filesystem
+
+  - 2025-03-31 - **Myriad new filesystem on Mon 7 April**
+
+    We are replacing Myriad's filesystem with the new one on Monday 7 April.
+
+    From 9am there will be a maintenance period when you will not be able to log in while we switch over to the new filesystem and do final checks. We expect to give you access again later during the 7 April, but if it takes longer you may not have access until Tues 8 April.
+
+    Only the data on ACFS will be backed up. Please note that the data on the new filesystem will not be backed up, 
+    not even data under `/home`.
+
+    **After the maintenance, you will have the following storage locations:**
+ 
+    - `/home/username`: your new home directory on the new filesystem; not backed up
+    - `/home/username/Scratch`: we are keeping this as a directory in your home for convenience. It is now part of the same space with the same rules and quota as the rest of your home directory, still not backed up.
+    - `/home/username/oldhome`: a symbolic link to `/old_lustre/home/username`, your old home directory on the old filesystem; read-only (no changes to data possible)
+    - `/home/username/oldscratch`: a symbolic link to `/old_lustre/scratch/username`, your old scratch directory on the old filesystem; read-only (no changes to data possible)
+    - `/home/username/ACFS`: a symbolic link to your ACFS space where you can put data you want to be backed up; unaffected by this change
+
+    **Quotas**
+
+    You will have one quota of 1T on Myriad for your home by default. If you applied for a quota increase or renewal after 15 Feb 2025 we will set this quota on the new filesystem for you (also if you already applied for the increase specifically for the new filesystem). If you had a quota increase from before 15 Feb, it will not be recreated on the new filesystem straight away and you will need to apply for it again.
+
+    **New terms for quota increases and when data is deleted**
+
+    If you have a Myriad quota increase, it will have an expiry date, maximum of one year after application. You will be sent a reminder one month before your quota expires, and then reminders at two weeks, one week, expiry day, two weeks after, one month after. One month after a quota has expired, if you have not contacted us, we will move all the contents of your Myriad home and Scratch into another location. We will keep your data there for two months further to give you longer to contact us to reapply for quota or retrieve the data and will then delete all of it. Please consider this at the time of applying for your quota increase, especially if you expect to be away from UCL for a period of time.
+
+    This is to prevent Myriad's filesystem from filling up from large quota increases that expire and are not removed. 
+    If you are in contact with us and reapplying for your quota increases, this should allow us to keep granting them 
+    to you. 
+
+    **What you need to do**
+
+    **Step 1: Move your data**
+
+    After we tell you the new filesystem is available and you can log in, you will need to log in using your UCL 
+    password, as any ssh keys you might have set up will not be there on the new filesystem. You can then copy your 
+    `.ssh` directory from `/old_lustre/home/username` to your new home.
+
+    Commands you may wish to use for copying:
+
+    - Copy your old .ssh directory into your new home (~) recursively and preserve permissions:
+        - `cp -rp ~/oldhome/.ssh ~`  
+    - Use rsync archive mode (recursively copy directories, copy symlinks without resolving, and preserve permissions, ownership and modification times) to copy your old .ssh directory into your new home. The `--safe-links` option tells it to ignore any symbolic links that point outside the copied tree and any symlinks that are absolute paths:
+        - `rsync --safelinks -r -a ~/oldhome/.ssh ~` 
+
+    Copy only works locally, so you can use it for any filesystems that are directly mounted on Myriad (old_lustre, ACFS, RDSS, new filesystem). Rsync can be used locally or between remote systems as well. It can also resume incomplete copies by running again and doesn't re-copy data that you have already copied if your transfer gets interrupted for any reason.
+
+    You will need to copy your data off old_lustre onto the new filesystem, or the ACFS, or the RDSS if you have a project, or onto other external systems if you want to keep it for future reference.
+
+    If you have large amounts of data (particularly many small files) that you are intending to archive elsewhere, consider creating tar archives straight away instead of copying data recursively first.
+
+    - `tar -czvf /home/username/Scratch/myarchive.tar.gz /old_lustre/home/username/data` will (c)reate a g(z)ipped archive (v)erbosely in the specified (f)ilename location on the new filesystem. The contents will be everything in this user's old "data" directory.
+
+    **Step 2: release your jobs**
+
+    All your jobs will be in held status (`hqw`) so that they do not fail while your data is not there. After you have copied the data that your jobs need to the new filesystem, you can release the hold on your queued jobs.
+
+    - `qrls $JOB_ID` will release a specific job ID, and `qrls all` will release all your jobs.
+
+    Released array jobs will have the first task in status qw and the rest in hqw - this is normal.
+
+    **FAQ: .bashrc and hidden files**
+
+    _Where is my old .bashrc? Why are my jobs failing with module errors now? Why are my python packages not there?_
+
+    Your `.bashrc` is in `/old_lustre/home/username/.bashrc`
+
+    It begins with a dot and is a hidden file so will only show up with `ls -a` rather than `ls`. You can copy this across into your current home again. You may have put module load and unload commands in it, so are now getting module conflicts when your jobs run since otherwise the modules are still the default ones.
+
+    This also applies to other hidden files or directories you may have, like `.condarc` and `.python3local` where you may have environments defined or packages installed.
+
+    _After I move my files, will they still be read-only?_
+
+    No, it is the old filesystem itself that was set to be read-only. After you copy your files to the new filesystem, 
+    you will be able to edit them in the same way as before.
+
+    **Project/shared spaces/hosted datasets**
+
+    If you have an existing project or shared space or hosted dataset (in `/lustre/projects` aka `/shared/ucl/depts`) you will need to reapply for this space and we will need to recreate it on the new filesystem. We'll be sending another email separately to people we have listed as the owners of spaces.
+
+    The same terms for quota increases and data deletion set out above will apply to project spaces so the data will 
+    be deleted if they expire and are not renewed, after reminders. Where an access group (eg `ag-archpc-groupname`, 
+    formerly `lgsh0xx`) has access to the space, we will contact all members of the group so they are still aware if 
+    the original owner of the space has left.
+
+    If you currently have an access group named like `lgsh0xx` for your space, as part of reapplying we will be 
+    transferring this to a new access group named `ag-archpc-groupname`. These groups can be updated within half 
+    an hour rather than only overnight.
+
+    **Removal of old filesystem**
+
+    `/old_lustre` will be available for three months, until 9am on Monday 7 July. It will then be
+    unmounted and you will not be able to access it any longer.
+
+    **Myriad at risk for first week**
+
+    Myriad should be considered exposed to potential issues for the first week of running a full
+    workload with the new filesystem, and so there might be interruptions to service if anything goes
+    wrong or needs tuning differently.
+
+    The new filesystem is GPFS (IBM Storage Scale) and not Lustre, for those who are interested.
+
+    Additional FAQs will be added here based on questions we receive.
+
+  - 2025-04-14 - **Myriad filesystem update and issues with symlinks**
+
+    This is a quick rundown of what else happened on Myriad last week and then some tips for problems
+    people have been having.
+
+    After the new filesystem went live, we had a few issues on Wednesday and Thursday where some jobs
+    were causing nodes to crash which was in turn causing the gpfs client to hang - which you will have
+    seen as timeouts or very slow access on the login nodes. The hangs also meant that a few people had
+    their new home directories only half-created, so didn't have a home directory that belonged to them
+    when they logged in. We changed some configuration on the compute nodes to fix the issue (the jobs
+    causing the problem were running out of virtual memory). People who had the home directory issue
+    should have been sorted out on Thursday and Friday - let us know if anyone else still gets an error
+    about their home directory not existing.
+
+    We were running more smoothly by Friday. Issues like these are why we said the rest of that week was
+    at risk, as there was likely to be something that needed adjusting once real jobs started.
+
+    **Symbolic links and Scratch**
+
+    You start out with an empty normal directory called Scratch in your home. What I had not considered
+    is if you rsync the whole of your oldhome back in, then it will rsync the old Scratch symlink
+    (shortcut) from oldhome and replace the empty Scratch directory with it. This only happens because
+    that directory is empty.
+
+    We have had tickets from some of you about finding that files are read-only that you think you have
+    copied - it is because they are still really on the old filesystem.
+
+    If you do an ls -al in your home you will be able to see if you have ended up with something similar
+    to this:
+
+    ```
+    lrwxrwxrwx   1 cceahke staff          24 Sep 10  2024 Scratch -> /lustre/scratch/scratch/cceahke
+    ```
+
+    That shows you that Scratch is a symlink and is pointing to a location on the old filesystem.
+
+    To fix, delete the symlink and recreate Scratch as a directory:
+    
+    ```    
+    rm Scratch
+    mkdir Scratch
+    ```
+
+    You can then go ahead and rsync the contents of oldscratch into Scratch so they are copied onto the 
+    new filesystem correctly. You cannot accidentally delete the contents of oldscratch since it is 
+    read-only.
+
+    If you have not rsynced your home yet, you could add the `--safe-links` option to rsync, which tells 
+    it to ignore any symbolic links that point outside the copied tree and any symlinks that are 
+    absolute paths. So when copying home, the symlink to `/lustre/scratch/scratch` should then be 
+    ignored: 
+
+    ```
+    rsync --safe-links -r -a ~/oldhome ~
+    ```
+
+    We are catching up on the quota and shared space requests we have received.
+
+  - 2025-05-23 10:30 - Myriad filesystem issues last night and this morning
+
+    We needed to stop jobs running last night at around 22:30 after something happened with Myriad's filesystem
+    beginning around 17:00 and getting worse by 18:00 - if you've had error messages in your jobs about "stale
+    file handles" or issues using the cluster interactively this is why.
+
+    We're continuing to work out what happened and get everything running again. We will send more information
+    when we have it.
+
+  - 2025-05-23 18:20 - Re: Myriad filesystem issues last night and this morning
+
+    We let jobs run this afternoon on part of Myriad and are continuing to allow them on the rest of the compute
+    nodes in sections so that everything should be up and running over the bank holiday weekend.
+
+  - 2025-06-25 11:40 - Myriad old filesystem removal at 9am on Mon 7 July
+
+    This is a reminder that your `oldhome`, `oldscratch` and any shared spaces on `/lustre` are going to be
+    unmounted on 9am on Monday 7 July.
+
+    If you know that you cannot complete copying your data by then, please let us know asap. We can grant short
+    term emergency quota increases on the new filesystem in advance of July review by the CRAG to allow you to
+    copy your data off there before it is removed. (If you have already sent those in, we'll be looking at them
+    shortly).
+
+    Reminder: `gquota` shows your new filesystem quota. The `lquota` command will still show you the quota for
+    your old space.
+
+#### Latest on Myriad
+
+  - 2025-07-01 16:35 - Full outage for Myriad during maintenance window on 8 July; 2 week extension for old
+    filesystem
+
+    We will be using Myriad's next maintenance day on **Tues 8 July** to update some firmware and make some
+    filesystem adjustments, and there will be a full outage all day where you will not be able to log in or
+    access the filesystem. We are draining jobs for 8am that day to allow those tasks to be carried out.
+
+    A job drain means that if your job won't have time to finish before the outage, it will not start and will
+    remain in the queue until afterwards, when it will be scheduled as normal. You do not need to take any action.
+
+    **2 week extension for old filesystem**
+
+    We have also had several requests to extend the time period for access to oldhome and oldscratch on the old
+    filesystem, which was due to be removed at 9am on 7 July. We are extending this for two weeks until
+    **9am on Mon 21 July**. This is to give you time to finish copying your data onto the new filesystem.
+    Your access will be interrupted during the maintenance period above.
+
+  - 2025-07-08 12:00 - Today's outage postponed
+
+    This outage has now been postponed and jobs have been re-enabled on Myriad.
+
+    We will likely need to reschedule it before the next maintenance period, but will let you
+    know once we have had some clarification from our vendors.
+
+    Apologies for the interruption!
+    
 
 ### Kathleen
 
@@ -709,6 +1065,160 @@ This page outlines that status of each of the machines managed by the Research C
     mounted on Kathleen until **Monday 16 December**. If you still have files in your old home and 
     scratch directories, they will no longer be accessible after this time. It will be unmounted at
     or shortly after 9am.
+
+  - 2025-02-10 - **OS, software stack and scheduler update news**
+
+    This is to keep you informed about upcoming changes to Kathleen.
+
+    **Live now:**
+
+    * Research Data Storage Service mount point on login nodes
+
+    If you have an RDSS project, you can now access that read-write on the Kathleen login nodes at `/rdss`.
+    There are subdirectories `rd00`, `rd01` that contain projects with names beginning
+    `ritd-ag-project-rd00` or `ritd-ag-project-rd01` and so on. You cannot access it from the compute
+    nodes. You should `cp` or `rsync` data to your home, Scratch or the ACFS via the login nodes before
+    doing any computation using the data.
+
+    **Incoming:**
+
+    * OS upgrade to RHEL 9.5
+    * Scheduler move to Slurm
+    * New software via Spack
+
+    We will be moving to RHEL 9.5 as our operating system and Slurm as our new scheduler.
+
+    We will send more updates when we are ready to roll it out - more info should be coming in the next 
+    couple of weeks. It will be available on Kathleen first.
+
+    Our user documentation will be updated with examples of Slurm jobscripts instead of the SGE ones we
+    currently have. Slurm uses `srun` and `sbatch` commands instead of `qsub`, if you have come across
+    those in other software documentation.
+
+    The OS upgrade should allow you to run more recent binaries that currently give errors about GLIBC
+    being too old. System tools will be newer and may look a little different.
+
+    We are also creating a new small software stack built with Spack. This will available to you to test
+    before the OS upgrade, then rebuilt again after it, so it will change slightly in the meantime. Do
+    let us know if applications you use in it are missing options we currently have or not working as
+    you expect.
+
+    We are aware there is a new CASTEP to add, and we can't install the recommended newer Intel OneAPI 
+    compilers to build the newest VASP until after the OS upgrade.
+
+    Most of the existing software stack will be reinstalled for the new OS. We are looking to remove
+    some of the oldest installs and modules that are not being used in jobs. We then intend to prune
+    this further over time and add newer versions into the Spack stack.
+
+    **Documentation links**
+
+    The SSL certificate for www.rc.ucl.ac.uk is due to expire at midnight on 12 Feb. We're getting a
+    new one but there might be a gap if it can't be renewed in time. If that happens your browser may
+    prevent you accessing that link because the certificate is expired.
+
+    * [mkdocs-rc-docs on Github](https://github-pages.arc.ucl.ac.uk/mkdocs-rc-docs/) will work
+
+    If there is a gap when the certificate expires we'll update the links in the message you see when
+    you log in to the cluster, but if you are using an existing link or bookmark for www.rc.ucl.ac.uk
+    at that point you will get an error or warning about the expired certificate.
+
+    (This did not happen, the certificate was renewed in time).
+
+  - 2025-02-17 - **New test software stack available**
+
+    There is a test version of our next software stack available now on Kathleen. This has a small 
+    number of packages at present. What is in it and the names of modules are liable to change over 
+    time, so please do not rely on it for production work. Instead, please test whether the 
+    applications you intend to use work the way you would expect.
+
+    This stack is built using [Spack](https://spack.readthedocs.io/en/latest/).
+
+    To use:
+
+    ```
+    module load beta-modules
+    module load test-stack/2025-02
+    ```
+
+    After that, when you type `module avail` there will be several sections of additional modules at 
+    the top of the output.
+
+    Not everything contained in the stack is visible by default - we have made the applications that 
+    we expect people to use directly visible and lots of their dependencies are hidden. These will 
+    show up if you search for that package specifically, for example:
+
+    ```
+    module avail libpng
+    -------------------------- /shared/ucl/apps/spack/0.23/deploy/2025-02/modules/applications/linux-rhel7-cascadelake --------------------------
+    libpng/1.6.39/gcc-12.3.0-iopfrab
+    ```
+
+    This module does not show up in the full list but is still installed. It has a hash at the end 
+    of its name `-iopfrab` and this will change over time with different builds.
+
+    If you find you are needing one of these modules often, let us know and we'll make it one that 
+    is not hidden in the next release of this stack.
+
+    The stack will be rebuilt for the operating system upgrade and moved out from beta-modules.
+
+    This information is available at 
+    [Kathleen test software stack](https://www.rc.ucl.ac.uk/docs/Clusters/Kathleen/#test-software-stack)
+
+  - 2025-06-06 12:10 - Kathleen operating system and scheduler upgrade
+
+    We are intending to upgrade half of Kathleen to the new operating system (RHEL9) and scheduler
+    (Slurm) and give you access on **Weds 18 June** if all goes well.
+
+    We are draining half of the compute nodes in preparation for this.
+
+    We intend to run old Kathleen and new Kathleen in parallel for a while to allow any problems to
+    be found, more software to be installed, and for you to gradually move over to the new environment
+    while still being able to use the old one so your work is not interrupted.
+
+    Maximum jobsize on old Kathleen will be 70 nodes during this time.
+
+    We will give you instructions on how to access new Kathleen login nodes and what the Slurm
+    jobscripts should look like nearer the time.
+
+    We will not have Apptainer available straight away - we intend to add it later.
+
+#### Latest on Kathleen
+
+  - 2025-06-18 17:05 - Kathleen operating system and scheduler upgrade
+
+    The upgraded half of Kathleen is now available.
+
+    To access, log in to `kathleen-ng.rc.ucl.ac.uk` instead of `kathleen.rc.ucl.ac.uk`. This is a
+    round-robin address for two login nodes. If you are outside UCL, use the ssh-gateway or VPN as
+    usual.
+
+    If you need to access the new login nodes individually, for now you can use these addresses:
+    ```
+    login21.kathleen.rc.ucl.ac.uk
+    login22.kathleen.rc.ucl.ac.uk
+    ```
+
+    We have updated documentation at:
+
+    - https://www.rc.ucl.ac.uk/docs/Clusters/Kathleen/ - contains info on the current split state and links to the following.
+    - https://www.rc.ucl.ac.uk/docs/Supplementary/Slurm/ - has the Slurm commands
+    - https://www.rc.ucl.ac.uk/docs/Supplementary/Slurm_Example_Jobscripts/ - has a couple of example jobscripts
+
+    The new software stack is provided by the `ucl-stack/2025-05` module, and we have a new
+    `default-modules/2025-05` that should also be loaded by default. We have made a change to the
+    top of everyone's `.bashrc` to make sure that the different default-modules are set
+    appropriately on both old and new Kathleen.
+
+    We do not currently have screen installed - we do have tmux.
+
+    Over the next few weeks we expect to be installing more software, fixing any issues and updating the
+    documentation further.
+
+    We expect to be running both halves of Kathleen for a month. If more work is required we may run old
+    Kathleen for a bit longer.
+
+    For any of you using VSCode, it should be able to connect to new Kathleen. The operating system on old
+    Kathleen (and Myriad) is old enough that current versions will no longer connect there.
 
 
 ### Young

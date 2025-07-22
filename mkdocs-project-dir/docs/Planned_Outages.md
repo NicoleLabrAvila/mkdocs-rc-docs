@@ -16,12 +16,16 @@ After an outage, the first day or two back should be considered 'at risk'; that 
 
 Date                | Service | Status | Reason 
 --------------------|---------|--------|--------
-11 February 2025 | Myriad | Planned | Maintenance day: nodes being drained for a system config change. Also a reboot of ACFS switches will cause the ACFS mount on Myriad to hang for a period during the day.
+23 July 2025 | Myriad | Planned | Full outage all day - no login access or jobs running. Vendors will be replacing a part on the filesystem and we will be doing some network reconfiguration. Jobs to be drained for 8am. Work expected to be completed on 23rd, system will be at risk the next day on Thurs 24 (may be instabilities/reboots as a result of previous work).
 
 ## Previous Outages
 
 Date                | Service | Status | Reason 
 --------------------|---------|--------|--------
+8 July 2025 | Myriad | Postponed | Full outage all day - no login access or jobs running. To update firmware and make filesystem adjustments. Jobs drained for 8am. Now postponed to later date, jobs re-enabled at 12:00.
+7 April 2025 | Myriad | Completed | Outage for switchover to new filesystem. No login access from 9am. Once access is restored later that day or the next day, you will have an empty new home and Scratch with symbolic links to `oldhome` and `oldscratch`. All jobs will be held. You will need to copy your data to the new filesystem or archive it. Once done, you can release the hold on your jobs using `qrls $JOB_ID` or `qrls all`. Access restored on 8 April.
+18 March 2025 | Myriad, Kathleen | Completed | ACFS will be unavailable and all jobs on Myriad and Kathleen will be drained for 8am. This is to do some work on the ACFS that will allow archiving in future. Had to schedule for 18th not 11th based on vendor availability. Jobs that will not be able to complete before the outage will stay in the queue and will not start until after the outage. The ACFS is at risk all day. We'll let you know if the work is completed earlier.
+11 February 2025 | Myriad | Completed | Maintenance day: nodes being drained for a system config change. Also a reboot of ACFS switches will cause the ACFS mount on Myriad to hang for a period during the day.
 28 January 2025 | Young, Michael | Completed | /old_lustre will be unmounted. If you still have files in your old home and scratch directories, they will no longer be accessible after this time.
 16 December 2024 | Kathleen | Completed | /old_lustre will be unmounted at or shortly after 9am. (Moved from 11 Dec). If you still have files in your old home and scratch directories, they will no longer be accessible after this time.
 4-8 November 2024 | Myriad, Young | Completed | New drivers being deployed on the GPU nodes in a rolling fashion. No outage of all nodes at once.
